@@ -5,7 +5,7 @@ return {
 		branch = "main",
 		build = ":TSUpdate",
 		config = function()
-      require'nvim-treesitter'.install { 'rust', 'lua', 'java' }
+			require("nvim-treesitter").install({ "rust", "lua", "java", "json" })
 		end,
 	},
 }
