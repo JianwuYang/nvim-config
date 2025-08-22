@@ -5,7 +5,7 @@ return {
 		branch = "main",
 		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter").install({ "rust", "lua", "java", "json" })
+			require("nvim-treesitter").install({ "rust", "lua", "java", "json", "bash", "regex" })
 
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = { "lua", "java", "rust" },
