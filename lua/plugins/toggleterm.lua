@@ -30,6 +30,13 @@ return {
 			vim.keymap.set("n", "<leader>lg", function()
 				lazygit:toggle()
 			end, { desc = "Toggle lazygit" })
+
+			vim.keymap.set(
+				"n",
+				"<leader>tf",
+				"<cmd>ToggleTerm direction=float<CR>",
+				{ desc = "Toggle floating terminal" }
+			)
 		end,
 	},
 }

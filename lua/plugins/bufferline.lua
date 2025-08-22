@@ -18,6 +18,9 @@ return {
 					always_show_bufferline = true,
 				},
 			})
+
+			vim.keymap.set("n", "<S-l>", ":BufferLineCycleNext<CR>")
+			vim.keymap.set("n", "<S-h>", ":BufferLineCyclePrev<CR>")
 		end,
 	},
 }
