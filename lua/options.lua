@@ -11,6 +11,9 @@ vim.opt.softtabstop = 2
 -- 智能 Tab
 vim.opt.smarttab = true
 
+-- 支持更多的颜色
+vim.opt.termguicolors = true
+
 -- start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
