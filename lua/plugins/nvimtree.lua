@@ -16,6 +16,10 @@ return {
 			renderer = {
 				group_empty = true,
 			},
+			filters = {
+				dotfiles = false,
+				custom = { ".git" },
+			},
 		})
 
 		-- 推荐绑定快捷键（<leader>e 打开/关闭树）
