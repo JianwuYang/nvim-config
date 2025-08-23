@@ -18,6 +18,9 @@ vim.opt.termguicolors = true
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- 显示行号
+vim.wo.number = true
+
 -- local function open_nvim_tree()
 -- 	-- open the tree
 -- 	require("nvim-tree.api").tree.open()

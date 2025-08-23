@@ -18,3 +18,12 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 vim.keymap.set("n", "<leader>bd", function()
 	vim.cmd("bd | b#")
 end, { desc = "Close current buffer and jump to previous" })
+
+
+-- 切换相对行号
+vim.keymap.set('n', '<leader>rn', function()
+  vim.wo.relativenumber = not vim.wo.relativenumber
+end)
+
+
+
