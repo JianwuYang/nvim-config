@@ -7,6 +7,7 @@ return {
 				formatters_by_ft = {
 					lua = { "stylua" },
 					rust = { "rustfmt" },
+					-- java = { "google-java-format" },
 				},
 			})
 			vim.keymap.set("n", "<leader>fm", function()
