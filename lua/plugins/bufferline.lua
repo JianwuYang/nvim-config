@@ -5,7 +5,7 @@ return {
 		dependencies = "nvim-tree/nvim-web-devicons",
     lazy = false,
 		keys = {
-			{ "<leader>bh", ":BufferLineCyclePrev<CR>", silent = true },
+			{ "<leader>bh", ":BufferLineCyclePrev<CR>", silent = true},
 			{ "<leader>bl", ":BufferLineCycleNext<CR>", silent = true },
 			{ "<leader>bd", ":bdelete<CR>", silent = true },
 			{ "<leader>bo", ":BufferLineCloseOthers<CR>", silent = true },

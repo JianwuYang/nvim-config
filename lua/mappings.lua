@@ -19,34 +19,29 @@ vim.keymap.set("n", "<leader>rn", function()
 	vim.wo.relativenumber = not vim.wo.relativenumber
 end)
 
-local opts = { noremap = true, silent = true }
-
 -- 跳转
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- 跳转到定义
-vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- 跳转到声明
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts) -- 跳转到实现
-vim.keymap.set("n", "gr", vim.lsp.buf.references, opts) -- 查看引用
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition" }) -- 跳转到定义
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { noremap = true, silent = true, desc = "Go to declaration" }) -- 跳转到声明
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation" }) -- 跳转到实现
+vim.keymap.set("n", "gr", vim.lsp.buf.references, { noremap = true, silent = true, desc = "Go to references" }) -- 查看引用
 
 -- 文档/帮助
-vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- 悬浮文档
-vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts) -- 签名帮助
-
--- 工作区
-vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-vim.keymap.set("n", "<leader>wl", function()
-	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-end, opts)
+vim.keymap.set("n", "K", vim.lsp.buf.hover, { noremap = true, silent = true, desc = "Hover" }) -- 悬浮文档
+vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { noremap = true, silent = true, desc = "Signature Help" }) -- 签名帮助
 
 -- 代码操作
-vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- 重命名
-vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- 代码操作
-vim.keymap.set("n", "<leader>f", function()
-	vim.lsp.buf.format({ async = true })
-end, opts) -- 格式化
+vim.keymap.set(
+	{ "n", "v" },
+	"<leader>ca",
+	vim.lsp.buf.code_action,
+	{ noremap = true, silent = true, desc = "Code Action" }
+) -- 代码操作
 
 -- 诊断 (Diagnostics)
-vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts) -- 查看诊断
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- 上一个诊断
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- 下一个诊断
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts) -- 诊断列表
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { noremap = true, silent = true, desc = "Show Diagnostics" }) -- 查看诊断
+vim.keymap.set(
+	"n",
+	"<leader>q",
+	vim.diagnostic.setloclist,
+	{ noremap = true, silent = true, desc = "Show Diagnostics List" }
+) -- 诊断列表

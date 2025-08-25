@@ -11,7 +11,7 @@ return {
 			})
 			vim.keymap.set("n", "<leader>fm", function()
 				require("conform").format({ async = true })
-			end)
+			end, { desc = "Code format" })
 		end,
 	},
 }
