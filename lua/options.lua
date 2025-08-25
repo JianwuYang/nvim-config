@@ -68,6 +68,8 @@ vim.diagnostic.config({
 	virtual_text = true,
 })
 
+vim.opt.clipboard = "unnamedplus"
+
 vim.g.clipboard = "osc52"
 
 vim.api.nvim_create_autocmd("FileType", {

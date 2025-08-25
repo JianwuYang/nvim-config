@@ -19,6 +19,20 @@ vim.keymap.set("n", "<leader>rn", function()
 	vim.wo.relativenumber = not vim.wo.relativenumber
 end)
 
+-- 设置 Ctrl+C 复制
+-- normal 和 visual 模式都可以用
+vim.keymap.set({'n', 'v'}, '<C-c>', function()
+    -- 如果是可视模式，先 yank 选中的内容
+    if vim.fn.mode() == 'v' or vim.fn.mode() == 'V' then
+        vim.cmd('normal! "+y')
+    else
+        -- 普通模式复制当前行
+        vim.cmd('normal! "+yy')
+    end
+    -- 给用户一点提示
+    vim.notify("Copied to clipboard", vim.log.levels.INFO)
+end, { noremap = true, silent = true })
+
 vim.api.nvim_create_autocmd("LspAttach", {
 
 	callback = function(event)

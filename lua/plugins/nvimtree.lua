@@ -14,6 +14,7 @@ return {
 				width = 30,
 			},
 			renderer = {
+        indent_width = 1,
 				group_empty = true,
 			},
 			filters = {
