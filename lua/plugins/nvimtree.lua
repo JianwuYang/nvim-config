@@ -18,7 +18,7 @@ return {
 			},
 			filters = {
 				dotfiles = false,
-				custom = { ".git" },
+				-- custom = { ".git" },
 			},
 		})
 
