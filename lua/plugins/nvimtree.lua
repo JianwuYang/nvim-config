@@ -28,6 +28,6 @@ return {
 		})
 
 		-- 推荐绑定快捷键（<leader>e 打开/关闭树）
-		vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle NvimTree" })
+		vim.keymap.set("n", "<c-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle NvimTree" })
 	end,
 }
