@@ -10,6 +10,7 @@ return {
 					-- java = { "google-java-format" },
 				},
 			})
+
 			vim.keymap.set("n", "<leader>fm", function()
 				require("conform").format({ async = true })
 			end, { desc = "Code format" })

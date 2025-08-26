@@ -19,69 +19,9 @@ vim.keymap.set("n", "<leader>rn", function()
 	vim.wo.relativenumber = not vim.wo.relativenumber
 end)
 
--- 设置 Ctrl+C 复制
--- normal 和 visual 模式都可以用
-vim.keymap.set({'n', 'v'}, '<C-c>', function()
-    -- 如果是可视模式，先 yank 选中的内容
-    if vim.fn.mode() == 'v' or vim.fn.mode() == 'V' then
-        vim.cmd('normal! "+y')
-    else
-        -- 普通模式复制当前行
-        vim.cmd('normal! "+yy')
-    end
-    -- 给用户一点提示
-    vim.notify("Copied to clipboard", vim.log.levels.INFO)
-end, { noremap = true, silent = true })
-
 vim.api.nvim_create_autocmd("LspAttach", {
 
 	callback = function(event)
-		-- -- 跳转
-		-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition" }) -- 跳转到定义
-		-- vim.keymap.set(
-		-- 	"n",
-		-- 	"gD",
-		-- 	vim.lsp.buf.declaration,
-		-- 	{ noremap = true, silent = true, desc = "Go to declaration" }
-		-- ) -- 跳转到声明
-		-- vim.keymap.set(
-		-- 	"n",
-		-- 	"gi",
-		-- 	vim.lsp.buf.implementation,
-		-- 	{ noremap = true, silent = true, desc = "Go to implementation" }
-		-- ) -- 跳转到实现
-		-- vim.keymap.set("n", "gr", vim.lsp.buf.references, { noremap = true, silent = true, desc = "Go to references" }) -- 查看引用
-		--
-		-- -- 文档/帮助
-		-- vim.keymap.set("n", "K", vim.lsp.buf.hover, { noremap = true, silent = true, desc = "Hover" }) -- 悬浮文档
-		-- vim.keymap.set(
-		-- 	"n",
-		-- 	"<C-k>",
-		-- 	vim.lsp.buf.signature_help,
-		-- 	{ noremap = true, silent = true, desc = "Signature Help" }
-		-- ) -- 签名帮助
-		--
-		-- -- 代码操作
-		-- vim.keymap.set(
-		-- 	{ "n", "v" },
-		-- 	"<leader>ca",
-		-- 	vim.lsp.buf.code_action,
-		-- 	{ noremap = true, silent = true, desc = "Code Action" }
-		-- ) -- 代码操作
-		--
-		-- -- 诊断 (Diagnostics)
-		-- vim.keymap.set(
-		-- 	"n",
-		-- 	"gl",
-		-- 	vim.diagnostic.open_float,
-		-- 	{ noremap = true, silent = true, desc = "Show Diagnostics" }
-		-- ) -- 查看诊断
-		-- vim.keymap.set(
-		-- 	"n",
-		-- 	"<leader>q",
-		-- 	vim.diagnostic.setloclist,
-		-- 	{ noremap = true, silent = true, desc = "Show Diagnostics List" }
-		-- ) -- 诊断列表
 		local map = function(keys, func, desc, mode)
 			mode = mode or "n"
 			vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
@@ -126,5 +66,76 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		--  the definition of its *type*, not where it was *defined*.
 		map("grt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
 
+		-- Diagnostics
+		vim.keymap.set("n", "<leader>ld", function()
+			vim.diagnostic.open_float({ source = true })
+		end, { buffer = event.buf, desc = "LSP: Show Diagnostic" })
+
+		vim.keymap.set(
+			"n",
+			"<leader>td",
+			(function()
+				local diag_status = 1 -- 1 is show; 0 is hide
+				return function()
+					if diag_status == 1 then
+						diag_status = 0
+						vim.diagnostic.config({
+							underline = false,
+							virtual_text = false,
+							signs = false,
+							update_in_insert = false,
+						})
+					else
+						diag_status = 1
+						vim.diagnostic.config({
+							underline = true,
+							virtual_text = true,
+							signs = true,
+							update_in_insert = true,
+						})
+					end
+				end
+			end)(),
+			{ buffer = event.buf, desc = "LSP: Toggle diagnostics display" }
+		)
+
+		vim.api.nvim_create_user_command(
+			"LspInfo",
+			":checkhealth vim.lsp",
+			{ desc = "Alias to `:checkhealth vim.lsp`" }
+		)
+		vim.api.nvim_create_user_command("LspLog", function()
+			vim.cmd(string.format("tabnew %s", vim.lsp.get_log_path()))
+		end, {
+			desc = "Opens the Nvim LSP client log.",
+		})
+
+		-- -- diagnostic UI touches
+		-- vim.diagnostic.config({
+		-- 	-- virtual_lines = { current_line = true },
+		-- 	virtual_text = {
+		-- 		spacing = 5,
+		-- 		prefix = "◍ ",
+		-- 	},
+		-- 	float = { severity_sort = true },
+		-- 	severity_sort = true,
+		-- 	signs = {
+		-- 		text = {
+		-- 			-- [vim.diagnostic.severity.ERROR] = '',
+		-- 			[vim.diagnostic.severity.ERROR] = "",
+		-- 			[vim.diagnostic.severity.WARN] = "",
+		-- 			[vim.diagnostic.severity.INFO] = "",
+		-- 			[vim.diagnostic.severity.HINT] = "",
+		-- 		},
+		-- 		numhl = {
+		-- 			[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+		-- 			[vim.diagnostic.severity.WARN] = "DiagnosticWarning",
+		-- 			[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+		-- 			[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+		-- 		},
+		-- 	},
+		-- })
+
+		vim.lsp.inlay_hint.enable(true)
 	end,
 })

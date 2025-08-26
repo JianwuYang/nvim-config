@@ -6,6 +6,9 @@ return {
 			-- diagnostics = {
 			-- 	enable = false,
 			-- },
+			check = {
+				command = "clippy",
+			},
 		},
 	},
 }

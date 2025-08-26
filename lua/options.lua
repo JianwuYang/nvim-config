@@ -70,7 +70,7 @@ vim.diagnostic.config({
 
 vim.opt.clipboard = "unnamedplus"
 
-vim.g.clipboard = "osc52"
+-- vim.g.clipboard = "osc52"
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "java" },
@@ -80,3 +80,5 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.bo.expandtab = true
 	end,
 })
+
+vim.o.guifont = "FiraCode Nerd Font Mono"
