@@ -5,8 +5,8 @@ return {
 		config = function()
 			require("conform").setup({
 				formatters_by_ft = {
-					lua = { "stylua" },
-					rust = { "rustfmt" },
+					-- lua = { "stylua" },
+					-- rust = { "rustfmt" },
 					-- java = { "google-java-format" },
 				},
 			})
