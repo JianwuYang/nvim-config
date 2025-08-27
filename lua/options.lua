@@ -127,4 +127,7 @@ vim.diagnostic.config({
   virtual_text = true,
   signs = true,
   update_in_insert = true,
+  float = { border = "rounded" },
 })
+
+vim.keymap.set("n", "q", "<Nop>", { noremap = true, silent = true })
