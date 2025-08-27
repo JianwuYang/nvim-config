@@ -14,128 +14,121 @@ vim.keymap.set("v", "<C-s>", "<Esc>:w<CR>gv", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+
 -- 切换相对行号
 vim.keymap.set("n", "<leader>rn", function()
-	vim.wo.relativenumber = not vim.wo.relativenumber
+  vim.wo.relativenumber = not vim.wo.relativenumber
 end)
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+  desc = "Highlight when yanking (copying) text",
+  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
 
 vim.api.nvim_create_autocmd("LspAttach", {
 
-	callback = function(event)
-		local map = function(keys, func, desc, mode)
-			mode = mode or "n"
-			vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-		end
+  callback = function(event)
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-		-- Rename the variable under your cursor.
-		--  Most Language Servers support renaming across files, etc.
-		map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
+    local map = function(keys, func, desc, mode)
+      mode = mode or "n"
+      vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+    end
 
-		-- Execute a code action, usually your cursor needs to be on top of an error
-		-- or a suggestion from your LSP for this to activate.
-		map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
+    -- map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 
-		map("grf", vim.lsp.buf.format, "Code Format")
+    -- map("<leader>ca", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
 
-		-- Find references for the word under your cursor.
-		map("grr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+    if client.server_capabilities.documentFormattingProvider then
+      map("<leader>fm", vim.lsp.buf.format, "Code Format")
+    end
 
-		-- Jump to the implementation of the word under your cursor.
-		--  Useful when your language has ways of declaring types without an actual implementation.
-		map("gri", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+    -- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 
-		-- Jump to the definition of the word under your cursor.
-		--  This is where a variable was first declared, or where a function is defined, etc.
-		--  To jump back, press <C-t>.
-		map("grd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+    -- map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 
-		-- WARN: This is not Goto Definition, this is Goto Declaration.
-		--  For example, in C this would take you to the header.
-		map("grD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+    -- map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
-		-- Fuzzy find all the symbols in your current document.
-		--  Symbols are things like variables, functions, types, etc.
-		map("gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
+    -- map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-		-- Fuzzy find all the symbols in your current workspace.
-		--  Similar to document symbols, except searches over your entire project.
-		map("gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
+    -- Diagnostics
+    vim.keymap.set("n", "<leader>ld", function()
+      vim.diagnostic.open_float({ source = true })
+    end, { buffer = event.buf, desc = "LSP: Show Diagnostic" })
 
-		-- Jump to the type of the word under your cursor.
-		--  Useful when you're not sure what type a variable is and you want to see
-		--  the definition of its *type*, not where it was *defined*.
-		map("grt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
+    vim.keymap.set(
+      "n",
+      "<leader>td",
+      (function()
+        local diag_status = 1 -- 1 is show; 0 is hide
+        return function()
+          if diag_status == 1 then
+            diag_status = 0
+            vim.diagnostic.config({
+              underline = false,
+              virtual_text = false,
+              signs = false,
+              update_in_insert = false,
+            })
+          else
+            diag_status = 1
+            vim.diagnostic.config({
+              underline = true,
+              virtual_text = true,
+              signs = true,
+              update_in_insert = true,
+            })
+          end
+        end
+      end)(),
+      { buffer = event.buf, desc = "LSP: Toggle diagnostics display" }
+    )
 
-		-- Diagnostics
-		vim.keymap.set("n", "<leader>ld", function()
-			vim.diagnostic.open_float({ source = true })
-		end, { buffer = event.buf, desc = "LSP: Show Diagnostic" })
+    vim.api.nvim_create_user_command(
+      "LspInfo",
+      ":checkhealth vim.lsp",
+      { desc = "Alias to `:checkhealth vim.lsp`" }
+    )
+    vim.api.nvim_create_user_command("LspLog", function()
+      vim.cmd(string.format("tabnew %s", vim.lsp.get_log_path()))
+    end, {
+      desc = "Opens the Nvim LSP client log.",
+    })
 
-		vim.keymap.set(
-			"n",
-			"<leader>td",
-			(function()
-				local diag_status = 1 -- 1 is show; 0 is hide
-				return function()
-					if diag_status == 1 then
-						diag_status = 0
-						vim.diagnostic.config({
-							underline = false,
-							virtual_text = false,
-							signs = false,
-							update_in_insert = false,
-						})
-					else
-						diag_status = 1
-						vim.diagnostic.config({
-							underline = true,
-							virtual_text = true,
-							signs = true,
-							update_in_insert = true,
-						})
-					end
-				end
-			end)(),
-			{ buffer = event.buf, desc = "LSP: Toggle diagnostics display" }
-		)
-
-		vim.api.nvim_create_user_command(
-			"LspInfo",
-			":checkhealth vim.lsp",
-			{ desc = "Alias to `:checkhealth vim.lsp`" }
-		)
-		vim.api.nvim_create_user_command("LspLog", function()
-			vim.cmd(string.format("tabnew %s", vim.lsp.get_log_path()))
-		end, {
-			desc = "Opens the Nvim LSP client log.",
-		})
-
-		-- -- diagnostic UI touches
-		-- vim.diagnostic.config({
-		-- 	-- virtual_lines = { current_line = true },
-		-- 	virtual_text = {
-		-- 		spacing = 5,
-		-- 		prefix = "◍ ",
-		-- 	},
-		-- 	float = { severity_sort = true },
-		-- 	severity_sort = true,
-		-- 	signs = {
-		-- 		text = {
-		-- 			-- [vim.diagnostic.severity.ERROR] = '',
-		-- 			[vim.diagnostic.severity.ERROR] = "",
-		-- 			[vim.diagnostic.severity.WARN] = "",
-		-- 			[vim.diagnostic.severity.INFO] = "",
-		-- 			[vim.diagnostic.severity.HINT] = "",
-		-- 		},
-		-- 		numhl = {
-		-- 			[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-		-- 			[vim.diagnostic.severity.WARN] = "DiagnosticWarning",
-		-- 			[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-		-- 			[vim.diagnostic.severity.HINT] = "DiagnosticHint",
-		-- 		},
-		-- 	},
-		-- })
-
-		vim.lsp.inlay_hint.enable(true)
-	end,
+    vim.lsp.inlay_hint.enable(true)
+  end,
 })
+
+
+-- Diagnostic Config
+-- See :help vim.diagnostic.Opts
+vim.diagnostic.config {
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+  underline = { severity = vim.diagnostic.severity.ERROR },
+  signs = vim.g.have_nerd_font and {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '󰅚 ',
+      [vim.diagnostic.severity.WARN] = '󰀪 ',
+      [vim.diagnostic.severity.INFO] = '󰋽 ',
+      [vim.diagnostic.severity.HINT] = '󰌶 ',
+    },
+  } or {},
+  virtual_text = {
+    source = 'if_many',
+    spacing = 2,
+    format = function(diagnostic)
+      local diagnostic_message = {
+        [vim.diagnostic.severity.ERROR] = diagnostic.message,
+        [vim.diagnostic.severity.WARN] = diagnostic.message,
+        [vim.diagnostic.severity.INFO] = diagnostic.message,
+        [vim.diagnostic.severity.HINT] = diagnostic.message,
+      }
+      return diagnostic_message[diagnostic.severity]
+    end,
+  },
+}

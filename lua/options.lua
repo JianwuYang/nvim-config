@@ -68,7 +68,9 @@ vim.diagnostic.config({
 	virtual_text = true,
 })
 
-vim.opt.clipboard = "unnamedplus"
+vim.schedule(function()
+  vim.o.clipboard = 'unnamedplus'
+end)
 
 -- vim.g.clipboard = "osc52"
 
