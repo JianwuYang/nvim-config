@@ -16,119 +16,102 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
--- 切换相对行号
-vim.keymap.set("n", "<leader>rn", function()
-  vim.wo.relativenumber = not vim.wo.relativenumber
-end)
-
 vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Highlight when yanking (copying) text",
-  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.hl.on_yank()
+	end,
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
 
-  callback = function(event)
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
+	callback = function(event)
+		local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-    local map = function(keys, func, desc, mode)
-      mode = mode or "n"
-      vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-    end
+		local map = function(keys, func, desc, mode)
+			mode = mode or "n"
+			vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+		end
 
-    -- map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+		if client.server_capabilities.documentFormattingProvider then
+			map("<leader>fm", vim.lsp.buf.format, "Code Format")
+		end
 
-    -- map("<leader>ca", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
+		-- Diagnostics
+		vim.keymap.set("n", "<leader>ld", function()
+			vim.diagnostic.open_float({ source = true })
+		end, { buffer = event.buf, desc = "LSP: Show Diagnostic" })
 
-    if client.server_capabilities.documentFormattingProvider then
-      map("<leader>fm", vim.lsp.buf.format, "Code Format")
-    end
+		vim.keymap.set(
+			"n",
+			"<leader>td",
+			(function()
+				local diag_status = 1 -- 1 is show; 0 is hide
+				return function()
+					if diag_status == 1 then
+						diag_status = 0
+						vim.diagnostic.config({
+							underline = false,
+							virtual_text = false,
+							signs = false,
+							update_in_insert = false,
+						})
+					else
+						diag_status = 1
+						vim.diagnostic.config({
+							underline = true,
+							virtual_text = true,
+							signs = true,
+							update_in_insert = true,
+						})
+					end
+				end
+			end)(),
+			{ buffer = event.buf, desc = "LSP: Toggle diagnostics display" }
+		)
 
-    -- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+		vim.api.nvim_create_user_command(
+			"LspInfo",
+			":checkhealth vim.lsp",
+			{ desc = "Alias to `:checkhealth vim.lsp`" }
+		)
 
-    -- map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+		vim.api.nvim_create_user_command("LspLog", function()
+			vim.cmd(string.format("tabnew %s", vim.lsp.get_log_path()))
+		end, {
+			desc = "Opens the Nvim LSP client log.",
+		})
 
-    -- map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-
-    -- map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-    -- Diagnostics
-    vim.keymap.set("n", "<leader>ld", function()
-      vim.diagnostic.open_float({ source = true })
-    end, { buffer = event.buf, desc = "LSP: Show Diagnostic" })
-
-    vim.keymap.set(
-      "n",
-      "<leader>td",
-      (function()
-        local diag_status = 1 -- 1 is show; 0 is hide
-        return function()
-          if diag_status == 1 then
-            diag_status = 0
-            vim.diagnostic.config({
-              underline = false,
-              virtual_text = false,
-              signs = false,
-              update_in_insert = false,
-            })
-          else
-            diag_status = 1
-            vim.diagnostic.config({
-              underline = true,
-              virtual_text = true,
-              signs = true,
-              update_in_insert = true,
-            })
-          end
-        end
-      end)(),
-      { buffer = event.buf, desc = "LSP: Toggle diagnostics display" }
-    )
-
-    vim.api.nvim_create_user_command(
-      "LspInfo",
-      ":checkhealth vim.lsp",
-      { desc = "Alias to `:checkhealth vim.lsp`" }
-    )
-    vim.api.nvim_create_user_command("LspLog", function()
-      vim.cmd(string.format("tabnew %s", vim.lsp.get_log_path()))
-    end, {
-      desc = "Opens the Nvim LSP client log.",
-    })
-
-    vim.lsp.inlay_hint.enable(true)
-  end,
+		vim.lsp.inlay_hint.enable(true)
+	end,
 })
-
 
 -- Diagnostic Config
 -- See :help vim.diagnostic.Opts
-vim.diagnostic.config {
-  severity_sort = true,
-  float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = vim.diagnostic.severity.ERROR },
-  signs = vim.g.have_nerd_font and {
-    text = {
-      [vim.diagnostic.severity.ERROR] = '󰅚 ',
-      [vim.diagnostic.severity.WARN] = '󰀪 ',
-      [vim.diagnostic.severity.INFO] = '󰋽 ',
-      [vim.diagnostic.severity.HINT] = '󰌶 ',
-    },
-  } or {},
-  virtual_text = {
-    source = 'if_many',
-    spacing = 2,
-    format = function(diagnostic)
-      local diagnostic_message = {
-        [vim.diagnostic.severity.ERROR] = diagnostic.message,
-        [vim.diagnostic.severity.WARN] = diagnostic.message,
-        [vim.diagnostic.severity.INFO] = diagnostic.message,
-        [vim.diagnostic.severity.HINT] = diagnostic.message,
-      }
-      return diagnostic_message[diagnostic.severity]
-    end,
-  },
-}
+vim.diagnostic.config({
+	severity_sort = true,
+	float = { border = "rounded", source = "if_many" },
+	underline = { severity = vim.diagnostic.severity.ERROR },
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "󰅚 ",
+			[vim.diagnostic.severity.WARN] = "󰀪 ",
+			[vim.diagnostic.severity.INFO] = "󰋽 ",
+			[vim.diagnostic.severity.HINT] = "󰌶 ",
+		},
+	} or {},
+	virtual_text = {
+		source = "if_many",
+		spacing = 2,
+		format = function(diagnostic)
+			local diagnostic_message = {
+				[vim.diagnostic.severity.ERROR] = diagnostic.message,
+				[vim.diagnostic.severity.WARN] = diagnostic.message,
+				[vim.diagnostic.severity.INFO] = diagnostic.message,
+				[vim.diagnostic.severity.HINT] = diagnostic.message,
+			}
+			return diagnostic_message[diagnostic.severity]
+		end,
+	},
+})

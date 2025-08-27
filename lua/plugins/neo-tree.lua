@@ -2,30 +2,30 @@
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
 
 return {
-  'nvim-neo-tree/neo-tree.nvim',
-  version = '*',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-    'MunifTanjim/nui.nvim',
-  },
-  lazy = false,
-  keys = {
-    { '<c-n>', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-  },
-  opts = {
-    filesystem = {
-      window = {
-        mappings = {
-          ['<c-n>'] = 'close_window',
-        },
-        indent = {
-          padding = 1, -- extra padding on left hand side
-          size = 2,
-          with_markers = true,
-          highlight = 'NeoTreeIndentMarker',
-        }
-      },
-    },
-  },
+  -- 'nvim-neo-tree/neo-tree.nvim',
+  -- version = '*',
+  -- dependencies = {
+  --   'nvim-lua/plenary.nvim',
+  --   'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+  --   'MunifTanjim/nui.nvim',
+  -- },
+  -- lazy = false,
+  -- keys = {
+  --   { '<c-n>', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+  -- },
+  -- opts = {
+  --   filesystem = {
+  --     window = {
+  --       mappings = {
+  --         ['<c-n>'] = 'close_window',
+  --       },
+  --       indent = {
+  --         padding = 1, -- extra padding on left hand side
+  --         size = 2,
+  --         with_markers = true,
+  --         highlight = 'NeoTreeIndentMarker',
+  --       }
+  --     },
+  --   },
+  -- },
 }

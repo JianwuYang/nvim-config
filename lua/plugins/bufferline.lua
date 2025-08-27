@@ -16,18 +16,18 @@ return {
       require("bufferline").setup({
         options = {
           offsets = {
-            -- {
-            -- 	filetype = "NvimTree",
-            -- 	text = "File Explorer",
-            -- 	highlight = "Directory",
-            -- 	text_align = "left",
-            -- },
             {
-              filetype = "neo-tree",
-              text = "File Explorer",
-              text_align = "left",
-              separator = true
-            }
+            	filetype = "NvimTree",
+            	text = "File Explorer",
+            	highlight = "Directory",
+            	text_align = "left",
+            },
+            -- {
+            --   filetype = "neo-tree",
+            --   text = "File Explorer",
+            --   text_align = "left",
+            --   separator = true
+            -- }
           },
           diagnostics = "nvim_lsp",
           separator_style = "slant",
