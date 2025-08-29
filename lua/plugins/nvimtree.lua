@@ -19,7 +19,7 @@ return {
 			},
 			filters = {
 				dotfiles = false,
-				-- custom = { ".git" },
+				custom = { ".git" },
 			},
 			update_focused_file = {
 				enable = true, -- 自动更新当前文件
