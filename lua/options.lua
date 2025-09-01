@@ -83,7 +83,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.o.guifont = "FiraCode Nerd Font Mono"
+vim.o.guifont = "FiraCode Nerd Font Mono,LXGW WenKai Mono"
 
 
 vim.api.nvim_create_autocmd("TextYankPost", {
