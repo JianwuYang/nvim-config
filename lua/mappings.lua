@@ -23,6 +23,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     vim.keymap.set("n", "<leader>fm", function()
       vim.lsp.buf.format({ async = true })
+      vim.notify("格式化完成", vim.log.levels.INFO)
     end, { buffer = event.buf, desc = "LSP: Format current buffer" })
 
 
