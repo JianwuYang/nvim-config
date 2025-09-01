@@ -31,9 +31,6 @@ return {
       vim.keymap.set("n", "<leader>nh", "<cmd>Noice history<CR>", { desc = "Noice history" })
       vim.keymap.set("n", "<leader>nl", "<cmd>Noice last<CR>", { desc = "Noice last message" })
 
-      require("notify").setup({
-        background_colour = "#000000",
-      })
     end,
   },
   {
