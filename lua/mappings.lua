@@ -55,6 +55,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     --  For example, in C this would take you to the header.
     map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
+    map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition (Native)')
+
     -- Fuzzy find all the symbols in your current document.
     --  Symbols are things like variables, functions, types, etc.
     map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')

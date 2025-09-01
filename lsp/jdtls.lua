@@ -2,6 +2,7 @@ local eclipse_jdtls_path = vim.fn.expand("$MASON/packages/jdtls")
 local equinox_launcher_path = vim.fn.glob(eclipse_jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar", 1)
 local lombok = eclipse_jdtls_path .. "/lombok.jar"
 local config_linux = eclipse_jdtls_path .. "/config_linux"
+local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t');
 return {
 	cmd = {
 		"java",
@@ -21,7 +22,7 @@ return {
 		"-configuration",
 		config_linux,
 		"-data",
-		"/home/yangjianwu/.cache/jdtls/workspace",
+		"/home/yangjianwu/.cache/jdtls/workspace/" .. project_name,
 	},
 	filetypes = { "java" },
 	settings = {
@@ -33,6 +34,10 @@ return {
 		},
 		workspace = "/home/yangjianwu/.cache/jdtls/workspace",
 	},
+  extendedClientCapabilities = {
+    resolveAdditionalTextEditsSupport = true,
+    classFileContentsSupport = true,
+  },
 	root_markers = {
 		".git",
 		"build.gradle",
