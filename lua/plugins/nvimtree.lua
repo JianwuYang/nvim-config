@@ -22,12 +22,11 @@ return {
         custom = { ".git" },
       },
       update_focused_file = {
-        enable = true,   -- 自动更新当前文件
+        enable = true,       -- 自动更新当前文件
         update_root = false, -- 是否更新根目录
       },
     })
 
     -- 推荐绑定快捷键（<leader>e 打开/关闭树）
     vim.keymap.set("n", "<c-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle NvimTree" })
-  end,
 }
