@@ -6,21 +6,11 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("telescope").setup({
+        defaults = {
+          path_display = { "smart" }
+        },
         pickers = {
-          find_files = {
-            theme = "dropdown",
-          },
-          live_grep = {
-            theme = "dropdown",
-          },
-          buffers = {
-            theme = "dropdown",
-          },
-          help_tags = {
-            theme = "dropdown",
-          },
           oldfiles = {
-            theme = "dropdown",
             cwd_only = true,
           },
         },
