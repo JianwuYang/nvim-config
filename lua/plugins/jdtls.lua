@@ -4,9 +4,7 @@ return {
     local home = os.getenv("HOME")
     local eclipse_jdtls_path = home .. '/.local/share/nvim/mason/packages/jdtls'
     local equinox_launcher_path = vim.fn.glob(eclipse_jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar", 1)
-    vim.print({ var = equinox_launcher_path })
     local lombok = eclipse_jdtls_path .. "/lombok.jar"
-    vim.print({ var = lombok })
     local config_linux = eclipse_jdtls_path .. "/config_linux"
     local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
     local workspace_dir = home .. "/.cache/jdtls/workspace/" .. project_name
