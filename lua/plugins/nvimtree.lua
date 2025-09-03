@@ -22,9 +22,6 @@ return {
         indent_width = 1,
         group_empty = true,
         hidden_display = "simple",
-        indent_markers = {
-          enable = true,
-        },
         icons = {
           git_placement = "after",
         }
@@ -32,7 +29,7 @@ return {
       filters = {
         dotfiles = false,
         custom = { "^.git$" },
-        exclude = { "application" },
+        exclude = { "application", ".vscode" },
       },
       diagnostics = {
         enable = true,

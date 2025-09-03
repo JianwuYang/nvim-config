@@ -1,5 +1,9 @@
 return {
   "mfussenegger/nvim-jdtls",
+  dependencies = {
+    "mfussenegger/nvim-dap",
+    "rcarriga/nvim-dap-ui",
+  },
   config = function()
     local home = os.getenv("HOME")
     local eclipse_jdtls_path = home .. '/.local/share/nvim/mason/packages/jdtls'
@@ -8,6 +12,10 @@ return {
     local config_linux = eclipse_jdtls_path .. "/config_linux"
     local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
     local workspace_dir = home .. "/.cache/jdtls/workspace/" .. project_name
+
+    local java_debuger_path = home .. '/.local/share/nvim/mason/packages/java-debug-adapter'
+    local java_debuger_launcher_path = { vim.fn.glob(
+      java_debuger_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar", 1) }
 
     local config = {
       cmd = {
@@ -38,7 +46,10 @@ return {
         "pom.xml",
         "settings.gradle",
         "settings.gradle.kts",
-      })
+      }),
+      init_options = {
+        bundles = java_debuger_launcher_path
+      },
     }
 
     vim.lsp.config("jdtls", config)
