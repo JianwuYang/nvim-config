@@ -13,6 +13,9 @@ return {
           oldfiles = {
             cwd_only = true,
           },
+          find_files = {
+            find_command = { "fd", "-I"}
+          },
         },
       })
 

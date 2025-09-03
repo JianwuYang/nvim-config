@@ -32,6 +32,7 @@ return {
       filters = {
         dotfiles = false,
         custom = { "^.git$" },
+        exclude = { "application" },
       },
       diagnostics = {
         enable = true,
