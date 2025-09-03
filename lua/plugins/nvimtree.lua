@@ -21,44 +21,17 @@ return {
         highlight_hidden = "all",
         indent_width = 1,
         group_empty = true,
-        hidden_display = "all",
+        hidden_display = "simple",
         indent_markers = {
           enable = true,
         },
         icons = {
           git_placement = "after",
-
-          glyphs = {
-            default = "",
-            symlink = "",
-            bookmark = "󰆤",
-            modified = "●",
-            hidden = "󰜌",
-            folder = {
-              arrow_closed = "",
-              arrow_open = "",
-              default = "",
-              open = "",
-              empty = "",
-              empty_open = "",
-              symlink = "",
-              symlink_open = "",
-            },
-            git = {
-              unstaged = "✗",
-              staged = "✓",
-              unmerged = "",
-              renamed = "➜",
-              untracked = "★",
-              deleted = "",
-              ignored = "◌",
-            },
-          },
         }
       },
       filters = {
         dotfiles = false,
-        git_ignored = false,
+        custom = { "^.git$" },
       },
       diagnostics = {
         enable = true,
