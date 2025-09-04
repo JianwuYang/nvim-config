@@ -19,7 +19,6 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 vim.api.nvim_create_autocmd("LspAttach", {
 
   callback = function(event)
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
 
     vim.keymap.set("n", "<leader>fm", function()
       vim.lsp.buf.format({ async = true })
