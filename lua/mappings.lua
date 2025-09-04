@@ -81,20 +81,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
       desc = "Opens the Nvim LSP client log.",
     })
 
-    vim.api.nvim_create_user_command("CleanJavaWorkSpace", function()
-      local classpath = vim.fn.getcwd() .. "/.classpath"
-      if vim.fn.filereadable(classpath) == 1 then
-        os.remove(classpath)
-        vim.notify(".classpath 已删除", vim.log.levels.INFO)
-      else
-        vim.notify("未发现 .classpath 文件", vim.log.levels.WARN)
-      end
-
-      -- 重启 LSP（需要 nvim-lspconfig 0.8+）
-      vim.lsp.stop_client(client.id)
-      vim.cmd("edit") -- 重新加载当前 buffer 以触发 lsp 重启
-    end, { desc = "清理Java环境" })
-
     vim.lsp.inlay_hint.enable(true)
   end,
 })
