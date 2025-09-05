@@ -103,3 +103,5 @@ vim.diagnostic.config({
 })
 
 vim.keymap.set("n", "q", "<Nop>", { noremap = true, silent = true })
+vim.keymap.set("n", "p", "<Nop>", { noremap = true, silent = true })
+vim.keymap.set("v", "p", "<Nop>", { noremap = true, silent = true })
