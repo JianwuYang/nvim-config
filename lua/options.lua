@@ -102,6 +102,16 @@ vim.diagnostic.config({
   float = { border = "rounded" },
 })
 
-vim.keymap.set("n", "q", "<Nop>", { noremap = true, silent = true })
-vim.keymap.set("n", "p", "<Nop>", { noremap = true, silent = true })
-vim.keymap.set("v", "p", "<Nop>", { noremap = true, silent = true })
+local opts = { noremap = true, silent = true }
+
+vim.keymap.set("n", "q", "<Nop>", opts)
+vim.keymap.set("n", "p", "<Nop>", opts)
+vim.keymap.set("v", "p", "<Nop>", opts)
+
+vim.keymap.set("n", "x", '"_x', opts)
+vim.keymap.set("n", "c", '"_c', opts)
+vim.keymap.set("x", "c", '"_c', opts)
+
+vim.keymap.set("n", "d", '"_d', opts)
+vim.keymap.set("x", "d", '"_d', opts)
+
