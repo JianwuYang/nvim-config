@@ -10,9 +10,9 @@ return {
         check_ts = true,
       })
 
-      npairs.add_rules({
-        Rule("/*", "/", "java"),
-      })
+      -- npairs.add_rules({
+      --   Rule("/*", "/", "java"),
+      -- })
     end
   },
 }
