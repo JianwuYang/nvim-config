@@ -25,3 +25,5 @@ vim.opt.softtabstop = 2
 
 -- 显示行号
 vim.wo.number = true
+
+vim.g.clipboard = "osc52"
