@@ -34,7 +34,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
-
     vim.api.nvim_create_user_command(
       "LspInfo",
       ":checkhealth vim.lsp",
