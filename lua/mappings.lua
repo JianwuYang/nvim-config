@@ -3,6 +3,7 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to down window" })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to up window" })
 
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(event)
